@@ -21,6 +21,7 @@ function issetPostParams(string $params, string $param1, string $param2, string 
     return true;
 }
 
+//
 if(issetPostParams('name', 'firstName', 'phone', 'login', 'other')) {
     try {
         /** secure the data
