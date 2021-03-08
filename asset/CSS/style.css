@@ -1,0 +1,13 @@
+* {
+    font-family: Gill Sans,Gill Sans MT,Calibri,sans-serif;
+}
+
+#button {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    height: 3rem;
+    border-radius: 2rem;
+    text-align: center;
+}
+
