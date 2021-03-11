@@ -2,7 +2,7 @@
 class DB {
     //Crud is less repetitive and reusable
     private string $server = 'localhost';
-    private string $db= '';
+    private string $db= 'calendrier';
     private string $user = 'root';
     private string $passwd = 'dev';
 
