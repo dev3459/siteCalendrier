@@ -5,12 +5,13 @@
 
     <!-- modal window-->
     <div id="modal-1" class="modal">
-        <p>Le calendrier ici :)</p>
-        <div id="container"></div>
+        <div id="container">Le calendrier ici :)</div>
+        <a href="#modal-2" rel="modal:open">Continuer vers mon rendez-vous</a>
+
     </div>
 
 <!-- Link to open the modal -->
-<p><a href="#modal-1" rel="modal:open">Prendre un rendez-vous</a></p>
+<button type="submit" id="btnOpen"><a href="#modal-1" rel="modal:open">Prendre un rendez-vous</a></button>
 
 <!--errors-->
 <?php
@@ -30,6 +31,7 @@ if(isset($_GET['success']) && intval($_GET['success']) === -1) {
 <?php
 }
 ?>
+
 <!--le formulaire-->
 <div id="modal-2" class="modal">
 
@@ -38,47 +40,52 @@ if(isset($_GET['success']) && intval($_GET['success']) === -1) {
 
         <form method="post" action="Utilisateur/register.php">
             <div>
-                <label for="username"> Nom :
-                    <input type="text" name="username"  id="username" required>
+                <label for="username">
+                    <input type="text" name="username"  id="username" required placeholder="Nom :">
                 </label>
             </div>
             <div>
-                <label for="firstName"> Prénom :
-                    <input type="text" name="firstName" id="firstName" required>
+                <label for="firstName">
+                    <input type="text" name="firstName" id="firstName" required placeholder="Prénom :">
                 </label>
             </div>
             <div>
-                <label for="password"> Mot de passe :
-                    <input type="text" name="password" id="password" required>
+                <label for="password">
+                    <input type="text" name="password" id="password" required placeholder="Mot de passe :">
                 </label>
             </div>
             <div>
-                <label for="passwordConfirm"> Vérification du mot de passe :
-                    <input type="text" name="passwordConfirm" id="passwordConfirm" required>
+                <label for="passwordConfirm">
+                    <input type="text" name="passwordConfirm" id="passwordConfirm" required placeholder="Vérification du mot de passe :">
                 </label>
             </div>
 
             <div>
-                <label for="phone"> Numéro de téléphone :
-                    <input type="text" name="phone" id="phone" required>
+                <label for="phone">
+                    <input type="text" name="phone" id="phone" required placeholder="Numéro de téléphone :">
                 </label>
             </div>
             <div>
-                <label for="e-mail"> Mail :
-                    <input type="email" name="email" id="e-mail"  pattern="^[A-Za-z]+@{1} [A-Za-z] +\.{1} [A-Za-z] {2,}$" required>
+                <label for="e-mail">
+                    <input type="email" name="email" id="e-mail" pattern="^[A-Za-z]+@{1} [A-Za-z] +\.{1} [A-Za-z] {2,}$" required placeholder="Mail :">
+                </label>
+            </div>
+            <div> Raisons :
+                <label for="other">
+                    <select name="other" id="other-choice">
+                        <option value="1"> réparation pc</option>
+                        <option value="2"> réparation tablette</option>
+                        <option value="3">projet de site internet</option>
+                        <option value="4">e-commerce</option>
+                        <option value="5">autre</option>
+                    </select>
                 </label>
             </div>
             <div>
-                <label for="other"> Raison/ brève description du projet :
-                    <input type="text" name="other" id="other" required>
-                </label>
-            </div>
-            <div>
-                <button type="submit" value="envoyer">Valider mon rendez-vous</button>
+                <button type="submit" value="envoyer">Confirmer mon rendez-vous</button>
             </div>
         </form>
-        <!-- Link to open the modal -->
-        <p><a href="#modal-2" rel="modal:open">Prendre un rendez-vous</a></p>
+
     </div>
 </div>
 

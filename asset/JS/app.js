@@ -1,4 +1,11 @@
 /*modal window with calendar*/
+$('#btnOpen').addEventListener(function (event) {
+    let window = $('#modal-1').style.display = 'flex';
+})
+
+$('#modal-1').modal({
+    closeExisting: false
+});
 
 /* check password */
 let password = document.getElementById("id-password");

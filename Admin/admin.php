@@ -6,7 +6,7 @@ $users = $bd->query("SELECT * FROM Utilisateur ORDER BY id DESC LIMIT 0,5");
 	if(isset($_GET['role']) AND $_GET['role'] === 'Utilisateurs') {
 	   if(isset($_GET['confirme']) AND !empty($_GET['confirme'])) {
 	      $confirme = (int) $_GET['confirme'];
-	      $req = $bd->prepare('UPDATE `rendez-vous` SET user_fk WHERE id = ?');
+	      $req = $bd->prepare('UPDATE  utilisateur SET WHERE id = ?');
 	      $req->execute(array($confirme));
 	   }
 	   if(isset($_GET['supprime']) AND !empty($_GET['supprime'])) {
