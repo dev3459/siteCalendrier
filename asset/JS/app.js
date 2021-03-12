@@ -1,6 +1,6 @@
 /*modal window with calendar*/
-$('#btnOpen').addEventListener('click', function () {
-       $('#modal-1').style.display = 'flex';
+$('#btnOpen').click(function () {
+    $('#modal-1').style.display = 'flex';
 })
 
 $('#modal-1').modal({
@@ -8,6 +8,30 @@ $('#modal-1').modal({
 });
 
 /*calendar*/
+let months = [
+    'Janvier',
+    'Février',
+    'Mars',
+    'Avril',
+    'Mai',
+    'Juin',
+    'Juillet',
+    'Août',
+    'Septembre',
+    'Octobre',
+    'Novembre',
+    'Décembre'
+];
+
+let days = [
+    'ld',
+    'md',
+    'mcd',
+    'jd',
+    'vdd',
+    'smd',
+    'dmc'
+];
 
 
 

@@ -7,30 +7,27 @@
 <div id="modal-1" class="modal">
 
     <!--Le calendrier ici :)-->
-    <div id="calendar-container">
-
+    <div class="container">
+        <div id="calendar"></div>
     </div>
     <a href="#modal-2" rel="modal:open">Continuer vers mon rendez-vous</a>
 </div>
+
 <!-- Link to open the modal -->
 <button type="submit" id="btnOpen"><a href="#modal-1" rel="modal:open">Prendre un rendez-vous</a></button>
 
 <!--errors-->
 <?php
-if(isset($_GET['success']) && intval($_GET['success']) === 1) {
-?>
-<div class="success">Le rendez-vous est pris ! Merci :) !</div>
-<?php
+if(isset($_GET['success']) && intval($_GET['success']) === 1) { ?>
+    <div class="success">Le rendez-vous est pris ! Merci :) !</div> <?php
 }
-if(isset($_GET['success']) && intval($_GET['success']) === 0) {
-?>
-<div class="error">Une erreur s'est produite ! Le rendez-vous n'est pas pris ! :( </div>
-<?php
+
+if(isset($_GET['success']) && intval($_GET['success']) === 0) { ?>
+    <div class="error">Une erreur s'est produite ! Le rendez-vous n'est pas pris ! :( </div> <?php
 }
-if(isset($_GET['success']) && intval($_GET['success']) === -1) {
-?>
-<div class="error">Le mot de passe doit contenir au moins une lettre en majuscule,un chiffre et un caractère spéciale ! </div>
-<?php
+
+if(isset($_GET['success']) && intval($_GET['success']) === -1) { ?>
+    <div class="error">Le mot de passe doit contenir au moins une lettre en majuscule,un chiffre et un caractère spéciale ! </div> <?php
 }
 ?>
 
@@ -77,10 +74,10 @@ if(isset($_GET['success']) && intval($_GET['success']) === -1) {
                     <select name="other" id="other-choice">
                         <option value="1"> dépannage pc</option>
                         <option value="2"> dépannage tablette</option>
-                        <option value="3">devis de site internet</option>
-                        <option value="4">e-commerce</option>
-                        <option value="5">maintenance de site internet</option>
-                        <option value="5">autre...</option>
+                        <option value="3"> devis de site internet</option>
+                        <option value="4"> e-commerce</option>
+                        <option value="5"> maintenance de site internet</option>
+                        <option value="5"> autre...</option>
                     </select>
                 </label>
             </div>
