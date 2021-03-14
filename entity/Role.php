@@ -6,14 +6,14 @@
 class Role {
 
     private ?int $id;
-    private string $name;
+    private ?string $name;
 
     /**
      * Role constructor.
      * @param int|null $id
-     * @param string $name
+     * @param string|null $name
      */
-    public function __construct(?int $id, string $name) {
+    public function __construct(?int $id = null, ?string $name = null) {
         $this->id = $id;
         $this->name = $name;
     }
@@ -24,6 +24,17 @@ class Role {
      */
     public function getId(): ?int {
         return $this->id;
+    }
+
+    /**
+     * Set the role id if role id was not already set.
+     * @param int $id
+     * @return void
+     */
+    public function setId(int $id): void {
+        if(is_null($this->getId())) {
+            $this->id = $id;
+        }
     }
 
     /**
