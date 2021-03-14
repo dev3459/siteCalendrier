@@ -4,7 +4,7 @@ class DB {
     private string $server = 'localhost';
     private string $db= 'calendrier';
     private string $user = 'root';
-    private string $passwd = 'dev';
+    private string $passwd = '';
 
     private static ?PDO $dbInstance = null;
 
@@ -23,7 +23,8 @@ class DB {
     }
 
     /**
-     * @return (instance) PDO|null
+     * Return only one PDO  instance through the whole project.
+     * @return PDO|null (instance) PDO|null
      */
     public static function getInstance(): ?PDO {
         if(null === self::$dbInstance) {
