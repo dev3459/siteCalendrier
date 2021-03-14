@@ -63,7 +63,7 @@ class UserManager {
      * @param User $user
      * @return bool
      */
-    public function save(User $user): bool {
+    public function save(User &$user): bool {
         // If id is null, then it does not exits into the database.
         if(is_null($user->getId())) {
             if(!DB::isNull($user->getMail(), $user->getPassword(), $user->getPhone(), $user->getFirstName(), $user->getLastName(), $user->getRole()->getId())) {
@@ -82,6 +82,7 @@ class UserManager {
                 $stmt->bindValue(':r', DB::sanitizeInt($user->getRole()->getId()), PDO::PARAM_INT);
 
                 if ($stmt->execute()) {
+                    $user->setId(DB::getInstance()->lastInsertId());
                     return true;
                 }
             }

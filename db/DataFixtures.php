@@ -10,7 +10,9 @@ class DataFixtures {
     public function __construct() {
         $stmt_roles = DB::getInstance()->prepare('DELETE FROM role WHERE 1');
         $stmt_users = DB::getInstance()->prepare('DELETE FROM user WHERE 1');
-        $this->status = $stmt_roles->execute() && $stmt_users->execute();
+        $stmt_meets = DB::getInstance()->prepare('DELETE FROM meeting WHERE 1');
+
+        $this->status = $stmt_roles->execute() && $stmt_users->execute() && $stmt_meets;
     }
 
     /**
@@ -25,21 +27,18 @@ class DataFixtures {
             // Adding admin role.
             $role = new Role(null, 'admin');
             $manager->save($role);
-            $role->setId(DB::getInstance()->lastInsertId());
             $roles['admin'] = $role;
             echo "  --> Role ajouté: admin" . PHP_EOL;
 
             // Adding employee role.
             $role = new Role(null, 'employee');
             $manager->save($role);
-            $role->setId(DB::getInstance()->lastInsertId());
             $roles['employee'] = $role;
             echo "  --> Role ajouté: employee" . PHP_EOL;
 
             // Adding client role.
             $role = new Role(null, 'client');
             $manager->save($role);
-            $role->setId(DB::getInstance()->lastInsertId());
             $roles['client'] = $role;
             echo "  --> Role ajouté: client" . PHP_EOL;
         }
@@ -126,14 +125,47 @@ class DataFixtures {
 
         return $users;
     }
+
+
+    /**
+     * Load fake meetings for dev purpose.
+     * @param array $users
+     * @param int $count
+     */
+    public function loadMeetings(array $users): array {
+        $meetings = [];
+        $meetingManager = new MeetingManager();
+        echo "Table des meetings vidée" . PHP_EOL;
+
+        foreach($users['clients'] as $client) {
+            $meeting = new Meeting();
+            $meeting->setClient($client);
+            $meeting->setEmployee($users['employees'][rand(0, count($users['employees']) -1)]);
+            $meeting->setProject('Super projet numéro ' . $client->getId());
+            $meeting->setLocation('Un endroit au top ' . $client->getId());
+            $meeting->setDate(new DateTime());
+
+            // Sauvegarde.
+            if($meetingManager->save($meeting)) {
+                echo "  --> Meeting ajouté: Entre le client " . $client->getMail() . " ET l'employé " . $meeting->getEmployee()->getMail() . PHP_EOL;
+            }
+        }
+
+        return $meetings;
+    }
 }
 
 require './DB.php';
+
 require '../entity/Role.php';
 require '../entity/User.php';
+require '../entity/Meeting.php';
+
 require '../manager/RoleManager.php';
 require '../manager/UserManager.php';
+require '../manager/MeetingManager.php';
 
 $fixtures = new DataFixtures();
 $roles = $fixtures->loadRoles();
 $users = $fixtures->loadUsers($roles, 1, 2, 5);
+$fixtures->loadMeetings($users);

@@ -44,7 +44,7 @@ class RoleManager {
      * @param Role $role
      * @return bool
      */
-    public function save(Role $role): bool {
+    public function save(Role &$role): bool {
         // If id is null, then it does not exits into the database.
         if(is_null($role->getId())) {
             // If role name is not null.
@@ -52,6 +52,7 @@ class RoleManager {
                 $stmt = DB::getInstance()->prepare("INSERT INTO role (name) VALUES (:n)");
                 $stmt->bindValue(':n', DB::sanitizeString($role->getName()));
                 if ($stmt->execute()) {
+                    $role->setId(DB::getInstance()->lastInsertId());
                     return true;
                 }
             }
