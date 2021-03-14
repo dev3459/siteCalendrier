@@ -6,24 +6,24 @@
 class User {
 
     private ?int $id;
-    private string $mail;
-    private string $password;
-    private string $phone;
-    private string $firstName;
-    private string $lastName;
-    private Role $role;
+    private ?string $mail;
+    private ?string $password;
+    private ?string $phone;
+    private ?string $firstName;
+    private ?string $lastName;
+    private ?Role $role;
 
     /**
      * User constructor.
      * @param int|null $id
-     * @param string $m
-     * @param string $pswd
-     * @param string $phone
-     * @param string $fName
-     * @param string $lName
-     * @param Role $r
+     * @param string|null $m
+     * @param string|null $pswd
+     * @param string|null $phone
+     * @param string|null $fName
+     * @param string|null $lName
+     * @param Role|null $r
      */
-    public function __construct(?int $id, string $m, string $pswd, string $phone, string $fName, string $lName, Role $r) {
+    public function __construct(?int $id=null, string $m=null, string $pswd=null, string $phone=null, string $fName=null, string $lName=null, Role $r=null) {
         $this->id = $id;
         $this->mail = $m;
         $this->password = $pswd;
@@ -39,6 +39,17 @@ class User {
      */
     public function getId(): ?int {
         return $this->id;
+    }
+
+    /**
+     * Set the user id if user id was not already set.
+     * @param int $id
+     * @return void
+     */
+    public function setId(int $id): void {
+        if(is_null($this->getId())) {
+            $this->id = $id;
+        }
     }
 
     /**
