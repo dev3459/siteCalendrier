@@ -7,13 +7,20 @@ class MeetingManager {
 
     /**
      * Return a list of available meetings as Meeting array.
+     * @param User|null $user
      * @return array
+     * @throws Exception
      */
-    public function getMeetings(): array {
+    public function getMeetings(User $user = null): array {
         $meetings = [];
         $userManager = new UserManager();
-        $stmt = DB::getInstance()->prepare("SELECT * FROM meeting");
-
+        if(is_null($user)) {
+            $stmt = DB::getInstance()->prepare("SELECT * FROM meeting");
+        }
+        else {
+            $stmt = DB::getInstance()->prepare("SELECT * FROM meeting WHERE employee_fk = :id OR client_fk = :id");
+            $stmt->bindValue(':id', $user->getId());
+        }
         if($stmt->execute()) {
             foreach($stmt->fetchAll() as $data) {
                 $meeting = new Meeting($data['id'], $data['location'], new DateTime($data['date']), $data['project']);
@@ -101,6 +108,21 @@ class MeetingManager {
             }
         }
 
+        return false;
+    }
+
+
+    /**
+     * Delete a meeting if exists.
+     * @param Meeting $meeting
+     * @return bool
+     */
+    public function delete(Meeting $meeting) {
+        if(!DB::isNull($meeting->getId())) {
+            $stmt = DB::getInstance()->prepare("DELETE FROM meeting WHERE id=:id");
+            $stmt->bindValue(':id', $meeting->getId());
+            return $stmt->execute();
+        }
         return false;
     }
 }

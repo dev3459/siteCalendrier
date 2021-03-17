@@ -40,7 +40,24 @@ class RoleManager {
     }
 
     /**
-     * Save a role.
+     * @param string $roleName
+     * @return Role
+     */
+    public function getRoleByName(string $roleName): Role {
+        $role = new Role();
+        $stmt = DB::getInstance()->prepare("SELECT * FROM role WHERE name=:name");
+        $stmt->bindValue(':name', $roleName);
+
+        if($stmt->execute()) {
+            $data = $stmt->fetch();
+            $role->setId($data['id']);
+            $role->setName($data['name']);
+        }
+        return $role;
+    }
+
+    /**
+     * Save a role if id is not null, add a new one otherwise.
      * @param Role $role
      * @return bool
      */
@@ -70,6 +87,21 @@ class RoleManager {
             }
         }
 
+        return false;
+    }
+
+
+    /**
+     * Delete a role if exists.
+     * @param Role $role
+     * @return bool
+     */
+    public function delete(Role $role): bool {
+        if(!DB::isNull($role->getId())) {
+            $stmt = DB::getInstance()->prepare("DELETE FROM role WHERE id=:id");
+            $stmt->bindValue(':id', $role->getId());
+            return $stmt->execute();
+        }
         return false;
     }
 }

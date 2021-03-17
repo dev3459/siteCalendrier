@@ -1,8 +1,3 @@
-<?php
-    DB::getInstance();
-    require_once 'include.php';
-?>
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -12,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../../../asset/CSS/style.css">
+    <link rel="stylesheet" href="../../../asset/css/style.css">
     <title>formulaire réservation</title>
 </head>
 <body>

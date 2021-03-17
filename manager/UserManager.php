@@ -18,7 +18,7 @@ class UserManager {
                 $role = $roleManager->getRole($user_data['role_fk']);
                 // If id is a number and nut null, then create user object.
                 if($role->getId()) {
-                    $user[] = new User(
+                    $users[] = new User(
                         $user_data['id'],
                         $user_data['mail'],
                         $user_data['password'],
@@ -31,6 +31,26 @@ class UserManager {
             }
         }
         return $users;
+    }
+
+    /**
+     * Return a list of users based on roles.
+     * @return array
+     */
+    public function getUsersByRole(): array {
+        $users = $this->getUsers();
+        $roles = (new RoleManager())->getRoles();
+
+        $byRole = [];
+        foreach($roles as $role) {
+            $byRole[$role->getName()] = [];
+        }
+
+        // Filtering users by roles.
+        foreach($users as $user) {
+            $byRole[$user->getRole()->getName()][] = $user;
+        }
+        return $byRole;
     }
 
     /**
@@ -135,5 +155,32 @@ class UserManager {
             }
         }
         return false;
+    }
+
+
+    /**
+     * Delete a user from database.
+     * @param User $user
+     * @return bool
+     */
+    public function delete(User $user): bool {
+        if(!DB::isNull($user->getId())) {
+            $stmt = DB::getInstance()->prepare("DELETE FROM user WHERE id=:id");
+            $stmt->bindValue(':id', $user->getId());
+            return $stmt->execute();
+        }
+        return false;
+    }
+
+    /**
+     * Return an array containing user meetings.
+     * @param User $user
+     * @return array
+     */
+    public function getMeetings(User $user): array {
+        if(!DB::isNull($user->getId())) {
+            return (new MeetingManager())->getMeetings($user);
+        }
+        return [];
     }
 }
