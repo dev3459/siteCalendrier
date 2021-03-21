@@ -11,19 +11,23 @@ class Meeting {
     private ?string $project;
     private ?User $employee;
     private ?User $client;
+    private ?string $commentaire;
 
     /**
      * Meeting constructor.
      * @param int|null $id
      * @param string|null $location
-     * @param string|null $date
+     * @param String|null $date
      * @param string|null $project
+     * @param string|null $comment
+     * @throws Exception
      */
-    public function __construct(int $id = null, string $location = null, DateTime $date = null, string $project = null) {
+    public function __construct(int $id = null, string $location = null, String $date = null, string $project = null, string $comment = null) {
         $this->id = $id;
         $this->location = $location;
         $this->date = new DateTime($date);
         $this->project = $project;
+        $this->commentaire = $comment;
     }
 
     /**
@@ -70,10 +74,11 @@ class Meeting {
 
     /**
      * Set the meeting datetime.
-     * @param Datetime|null $date
+     * @param String|null $date
+     * @throws Exception
      */
-    public function setDate(?Datetime $date): void {
-        $this->date = $date;
+    public function setDate(?String $date): void {
+        $this->date = new DateTime($date);
     }
 
     /**
@@ -124,6 +129,20 @@ class Meeting {
         $this->client = $client;
     }
 
+    /**
+     * Return comment or null if none.
+     * @return string|null
+     */
+    public function getComment(): ?string {
+        return $this->commentaire;
+    }
 
+    /**
+     * Set a new comment for meeting.
+     * @param String|null $comment
+     */
+    public function setComment(?String $comment): void {
+        $this->commentaire = $comment;
+    }
 
 }

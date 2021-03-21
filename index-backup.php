@@ -1,8 +1,3 @@
-<?php
-/*    include 'include.php';
-    DB::getInstance();
-*/?><!--
-
 <!-- modal window-->
 <div id="modal-1" class="modal">
 

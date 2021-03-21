@@ -1,70 +1,32 @@
-* {
-    font-family: Gill Sans,Gill Sans MT,Calibri,sans-serif;
-    box-sizing: border-box;
-    font-size: unset;
-}
-
-.success {
-    width: 100%;
-    background-color: greenyellow;
-    height: 5rem;
-}
-
-.error {
-    width: 100%;
-    background-color: darkred;
-    height: 5rem;
-}
-
-/*modals windows*/
-#modal-1, #modal-2 {
-    height: 25rem;
-    width: 50%;
-    display: none;
-    justify-content: center;
-    border-radius: 2rem;
-    text-align: center;
-}
-/*le formulaire*/
-form {
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: space-around;
-    text-align: start;
-}
-
-#logo {
-    position: absolute;
-    height: 17%;
-    width: 4rem;
-    top: 0;
-    right: 0;
-}
-
-form input, form select {
-    margin-top : 12px
-}
-
-form button {
-    margin-top: 29px;
-    border-radius: 3rem;
-    height: 25px;
-    position: relative;
-    left:53%;
-    color: white;
-    background-color: #1748d5;
-}
-
-a {
-    text-decoration-line: none;
-}
-
-/*calendar*/
 .container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    min-height: 100%;
+    padding: 2rem 0;
 }
 
+@media (min-width: 576px){
+    .modal-dialog {
+        max-width: 400px;
+    }
+    .modal-content {
+        padding: 1rem;
+    }
+}
+
+.modal-header .close {
+    margin-top: -1.5rem;
+}
+
+.form-title {
+    margin: -2rem 0 2rem;
+}
+
+.btn-round {
+    border-radius: 3rem;
+}
+
+.delimiter {
+    padding: 1rem;
+}
+
+.signup-section {
+    padding: 0.3rem 0;
+}

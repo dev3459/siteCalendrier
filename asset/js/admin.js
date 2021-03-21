@@ -1,116 +1,150 @@
-// Initiate datatables in roles, tables, users page
-$('#dataTables-example').DataTable({
+/*******************************************************
+ **  Initiate datatables in roles, tables, users page **
+ *******************************************************/
+$('.dataTables').DataTable({
     responsive: true,
     pageLength: 20,
     lengthChange: false,
     searching: true,
-    ordering: true
+    ordering: true,
+    columnDefs: [ {
+        targets  : 'no-sort',
+        orderable: false,
+    }],
+    language: {
+        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+    }
 });
 
-
-// Toggle sidebar on Menu button click
+/******************************************
+ ** Toggle sidebar on Menu button click  **
+ ******************************************/
 $('#sidebarCollapse').on('click', function() {
     $('#sidebar').toggleClass('active');
     $('#body').toggleClass('active');
 });
 
-// Auto-hide sidebar on window resize if window size is small
+/*************************************************************** **
+ **  Auto-hide sidebar on window resize if window size is small  **
+ ******************************************************************/
 $(window).on('resize', function () {
      if ($(window).width() <= 768) {
          $('#sidebar, #body').addClass('active');
      }
 });
 
-// Starter JavaScript for disabling form submissions if there are invalid fields
-(function() {
-    'use strict';
-    window.addEventListener('load', function() {
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        const forms = document.getElementsByClassName('needs-validation');
-        // Loop over them and prevent submission
-        var validation = Array.prototype.filter.call(forms, function(form) {
-            form.addEventListener('submit', function(event) {
-                if (form.checkValidity() === false) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
 
-                // Checking emails fields.
-                const mails = form.querySelectorAll('input[type="email"]');
-                let pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                mails.forEach(mailInput => {
-                    const msg = mailInput.parentElement.querySelector('.invalid-feedback');
-                    if(!pattern.test(mailInput.value)) {
-                        msg.style.display = 'block';
-                        mailInput.setCustomValidity(msg.innerText);
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    else {
-                        msg.style.display = 'none';
-                        mailInput.setCustomValidity('');
-                    }
-                });
+/******************************************
+ **  Handling meetings details ************
+ ******************************************/
+$('.show-meeting-details').click(function() {
+    const id = $(this).find('[data-name="id"]').text();
+    const name = $(this).find('[data-name="location"]').text();
+    const date = $(this).find('[data-name="date"]').text();
+    const project = $(this).find('[data-name="project"]').text();
+    const clientFirstName = $(this).find('[data-name="client-first-name"]').text();
+    const clientLastName = $(this).find('[data-name="client-last-name"]').text();
+    const clientMail = $(this).find('[data-name="client-mail"]').text();
+    const clientPhone = $(this).find('[data-name="client-phone"]').text();
+    const employeeFirstName = $(this).find('[data-name="employee-first-name"]').text();
+    const employeeLastName = $(this).find('[data-name="employee-last-name"]').text();
+    const employeeMail = $(this).find('[data-name="employee-mail"]').text();
+    const employeePhone = $(this).find('[data-name="employee-phone"]').text();
+    const employeeComment = $(this).find('[data-name="employee-comment"]').text();
 
-                // Checking password fields.
-                const password = form.querySelector('#password');
-                const passwordRepeat = form.querySelector('#passwordConfirm');
-                const passwordMsg = password.parentElement.querySelector('.invalid-feedback');
-                pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30}$/;
+    // Replace the meeting_id in link.
+    const addComment = $('#add_comment');
+    addComment.attr('href', addComment.attr('href').substring(0, addComment.attr('href').lastIndexOf('=') + 1) + id);
 
-                password.addEventListener('keyup', () => {
-                    password.setCustomValidity('');
-                    if(password.value.length > 0) {
-                        if(!pattern.test(password.value)) {
-                            passwordMsg.style.display = 'block';
-                            password.setCustomValidity(passwordMsg.innerText);
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        else {
-                            passwordMsg.style.display = 'none';
-                            password.setCustomValidity('');
-                        }
-                    }
-                });
+    $('#pill-informations').html(`
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <th>Lieu</th>
+                    <th>Date</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${name}</td>
+                        <td>${date}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                    <th>Client</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${clientFirstName}</td>
+                        <td>${clientLastName}</td>
+                        <td><a href="mailto:${clientMail}">${clientMail}</a></td>
+                        <td><a href="tel:${clientPhone}">${clientPhone}</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>    
+    `);
 
-                const passwordRepeatMsg = passwordRepeat.parentElement.querySelector('.invalid-feedback');
-                // Checking password matching.
-                passwordRepeat.addEventListener('keyup', () => {
-                    passwordRepeat.setCustomValidity('');
-                    if(passwordRepeat.value.length > 0) {
-                        if(passwordRepeat.value === passwordRepeat.value) {
-                            passwordRepeatMsg.style.display = 'none';
-                            passwordRepeat.setCustomValidity('');
-                        }
-                        else {
-                            passwordRepeatMsg.style.display = 'block';
-                            passwordRepeat.setCustomValidity(passwordRepeatMsg.innerText);
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                    }
-                });
 
-                // Checking phone fields.
-                const phones = form.querySelectorAll('input[type="tel"]');
-                pattern = /^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i;
-                phones.forEach(phoneInput => {
-                    const msg = phoneInput.parentElement.querySelector('.invalid-feedback');
-                    if(!pattern.test(phoneInput.value)) {
-                        msg.style.display = 'block';
-                        phoneInput.setCustomValidity(msg.innerText);
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    else {
-                        msg.style.display = 'none';
-                        phoneInput.setCustomValidity('');
-                    }
-                });
+    $('#pill-employee').html(`
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <th>Employé</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${employeeFirstName}</td>
+                        <td>${employeeLastName}</td>
+                        <td><a href="mailto:${employeeMail}">${employeeMail}</a></td>
+                        <td><a href="tel:${employeePhone}">${employeePhone}</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>    
+    `);
 
-                form.classList.add('was-validated');
-            }, false);
-        });
-    }, false);
-})();
+    $('#pill-project').html(`
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <th>Projet</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${project}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>    
+    `);
+
+    $('#comment-content').html(`
+        ${employeeComment.length > 0 ? employeeComment : 'Aucun commentaire, ajoutez en un si vous le souhaitez.'}
+    `);
+
+    $('#comment-button').html(`
+        ${employeeComment.length > 0 ? 'Editer le commentaire' : 'Ajouter un commentaire'}
+    `);
+
+    $('#meeting-details').show();
+});
+
+
+/*************************************
+ **  Handle click on tabs meetings  **
+ *************************************/
+const tabs = $('#pill-employee-tab, #pill-informations-tab, #pill-project-tab, #pill-employee-comment-tab');
+tabs.click(function(){
+    tabs.removeClass('active');
+    $(this).addClass('active');
+    $('#pill-project, #pill-informations, #pill-employee, #pill-employee-comment').removeClass('active').removeClass('show');
+    $('#' + $(this).attr('id').replace('-tab', '')).addClass('active').addClass('show');
+});

@@ -72,7 +72,7 @@ class DataFixtures {
             for($i = 0; $i < $countAdmins; $i++) {
                 $admin = new User();
                 $admin->setMail('admin-'. ($i + 1) .'@gmail.com');
-                $admin->setPassword('azerty');
+                $admin->setPassword('Azerty00!');
                 $admin->setPhone('+3200000' . ($i + 1));
                 $admin->setFirstName('FirstName-' . ($i + 1));
                 $admin->setLastName('LastName-' . ($i + 1));
@@ -89,7 +89,7 @@ class DataFixtures {
             for($i = 0; $i < $countEmployees; $i++) {
                 $employee = new User();
                 $employee->setMail('employee-'. ($i + 1) .'@gmail.com');
-                $employee->setPassword('azerty');
+                $employee->setPassword('Azerty00!');
                 $employee->setPhone('+3200000' . ($i + 1));
                 $employee->setFirstName('FirstName-' . ($i + 1));
                 $employee->setLastName('LastName-' . ($i + 1));
@@ -106,7 +106,7 @@ class DataFixtures {
             for($i = 0; $i < $countClients; $i++) {
                 $client = new User();
                 $client->setMail('client-'. ($i + 1) .'@gmail.com');
-                $client->setPassword('azerty');
+                $client->setPassword('Azerty00!');
                 $client->setPhone('+3200000' . ($i + 1));
                 $client->setFirstName('FirstName-' . ($i + 1));
                 $client->setLastName('LastName-' . ($i + 1));
@@ -143,7 +143,7 @@ class DataFixtures {
             $meeting->setEmployee($users['employees'][rand(0, count($users['employees']) -1)]);
             $meeting->setProject('Super projet numéro ' . $client->getId());
             $meeting->setLocation('Un endroit au top ' . $client->getId());
-            $meeting->setDate(new DateTime());
+            $meeting->setDate((new DateTime())->modify('+2 days')->format('Y-m-d H:i:s'));
 
             // Sauvegarde.
             if($meetingManager->save($meeting)) {

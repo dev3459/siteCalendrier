@@ -56,7 +56,7 @@ class User {
      * Return the user mail.
      * @return string
      */
-    public function getMail(): string {
+    public function getMail(): ?string {
         return $this->mail;
     }
 
@@ -88,7 +88,7 @@ class User {
      * Return the user phone number.
      * @return string
      */
-    public function getPhone(): string {
+    public function getPhone(): ?string {
         return $this->phone;
     }
 
@@ -104,7 +104,7 @@ class User {
      * Return the user first name.
      * @return string
      */
-    public function getFirstName(): string {
+    public function getFirstName(): ?string {
         return $this->firstName;
     }
 
@@ -120,7 +120,7 @@ class User {
      * Return the user last name.
      * @return string
      */
-    public function getLastName(): string {
+    public function getLastName(): ?string {
         return $this->lastName;
     }
 

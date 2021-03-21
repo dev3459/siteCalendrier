@@ -9,7 +9,7 @@
     <script src="https://kit.fontawesome.com/7c2a35dd94.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.1/main.min.css">
     <link href="/asset/css/admin.css" rel="stylesheet">
 </head>
 
@@ -26,11 +26,16 @@
             <li>
                 <a href="/index.php?page=admin&item=users"><i class="fas fa-users"></i> Utilisateurs</a>
             </li>
+            <?php
+            // Display the Roles menu only for admin.
+            if(RoleManager::isAdmin($currentUser)) { ?>
+                <li>
+                    <a href="/index.php?page=admin&item=roles"><i class="fas fa-users-cog"></i> Roles</a>
+                </li> <?php
+            } ?>
+
             <li>
-                <a href="/index.php?page=admin&item=roles"><i class="fas fa-users-cog"></i> Roles</a>
-            </li>
-            <li>
-                <a href="/index.php?page=admin&item=meetings"><i class="far fa-handshake"></i> Meetings</a>
+                <a href="/index.php?page=admin&item=meetings"><i class="far fa-handshake"></i> Rendez vous</a>
             </li>
         </ul>
     </nav>
@@ -42,16 +47,9 @@
                 <ul class="nav navbar-nav ml-auto">
                     <li class="nav-item dropdown">
                         <div class="nav-dropdown">
-                            <a href="" class="nav-item nav-link dropdown-toggle text-secondary" data-toggle="dropdown"><i class="fas fa-user"></i> <span>John Doe</span> <i style="font-size: .8em;" class="fas fa-caret-down"></i></a>
-                            <div class="dropdown-menu dropdown-menu-right nav-link-menu">
-                                <ul class="nav-list">
-                                    <li><a href="" class="dropdown-item"><i class="fas fa-address-card"></i> Profile</a></li>
-                                    <li><a href="" class="dropdown-item"><i class="fas fa-envelope"></i> Messages</a></li>
-                                    <li><a href="" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a></li>
-                                    <div class="dropdown-divider"></div>
-                                    <li><a href="" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                                </ul>
-                            </div>
+                            <a href="index.php?page=logout" class="nav-item nav-link dropdown-toggle text-secondary" data-toggle="dropdown"><i class="fas fa-user"></i>
+                                <span>Déconnexion</span>
+                            </a>
                         </div>
                     </li>
                 </ul>

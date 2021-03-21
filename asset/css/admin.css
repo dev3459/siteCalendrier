@@ -28,6 +28,40 @@ body {
     width: 100%;
 }
 
+.hidden {
+    display: none;
+}
+
+#pill-client-tab, #pill-employee-tab, #pill-informations-tab, #pill-project-tab, #pill-employee-comment-tab {
+    cursor: pointer;
+}
+
+.dataTables tr, .dataTables tr td {
+    border-color: lightgray !important;
+}
+
+.dataTables, .dataTables {
+    border-bottom: none;
+}
+
+.dataTables th {
+    border-right: 1px solid lightgray;
+}
+
+table.dataTable.no-footer {
+    border-bottom: none;
+}
+
+.dataTables .no-sort, .dataTables tbody th {
+    border-right: none !important;
+}
+
+.paginate_button.current {
+    background: none !important;
+    border-radius: 4px !important;
+    border-color: #22a1f9 !important;
+}
+
 .prepend-fa {
     padding: 4px;
 }
@@ -294,10 +328,6 @@ table.dataTable>tbody>tr.child ul.dtr-details {
     background-color: #fff;
     border-bottom: 2px solid #22a1f9;
 
-}
-
-.tab-content {
-    padding: 15px;
 }
 
 .svg-inline--fa {
