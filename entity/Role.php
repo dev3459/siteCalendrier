@@ -41,7 +41,7 @@ class Role {
      * Return the role name.
      * @return string
      */
-    public function getName(): string {
+    public function getName(): ?string {
         return $this->name;
     }
 

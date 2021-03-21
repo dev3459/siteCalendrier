@@ -1,91 +1,80 @@
 <?php
-    include 'include.php';
-    DB::getInstance();
-?>
+session_start();
 
-<!-- modal window-->
-<div id="modal-1" class="modal">
+require 'db/DB.php';
 
-    <!--Le calendrier ici :)-->
-    <div class="container">
-        <div id="calendar"></div>
-    </div>
-    <a href="#modal-2" rel="modal:open">Continuer vers mon rendez-vous</a>
-</div>
+require 'entity/Role.php';
+require 'entity/User.php';
+require 'entity/Meeting.php';
 
-<!-- Link to open the modal -->
-<button type="submit" id="btnOpen"><a href="#modal-1" rel="modal:open">Prendre un rendez-vous</a></button>
+require 'manager/RoleManager.php';
+require 'manager/UserManager.php';
+require 'manager/MeetingManager.php';
 
-<!--errors-->
-<?php
-if(isset($_GET['success']) && intval($_GET['success']) === 1) { ?>
-    <div class="success">Le rendez-vous est pris ! Merci :) !</div> <?php
+// Getting current user if any.
+if(isset($_SESSION['current_user'])) {
+    $currentUser = unserialize($_SESSION['current_user']);
+    if(RoleManager::isPowerUser($currentUser)) {
+        // Display the admin area link.
+    }
+}
+else {
+    $currentUser = new User();
 }
 
-if(isset($_GET['success']) && intval($_GET['success']) === 0) { ?>
-    <div class="error">Une erreur s'est produite ! Le rendez-vous n'est pas pris ! :( </div> <?php
+if (isset($_GET['page'])){
+    // Admin area.
+    if($_GET['page'] === 'admin') {
+        // Si l'utilisateur est connecté et qu'il est admin ou employé alors on peut afficher l'espace d'amdministration.
+        if($currentUser->getId() && RoleManager::isPowerUser($currentUser)) {
+            require 'view/admin/index.php';
+        }
+        else {
+            // Redirect to the home page if user is not admin or employee.
+            header('Location: index.php');
+        }
+    }
+
+    // Load meetings for calendar.
+    elseif($_GET['page'] === 'events') {
+        echo MeetingManager::getMeetingsAsJson();
+    }
+    // Login process, after having provided login informations.
+    elseif($_GET['page'] === 'login') {
+        if(isset($_POST['email']) && isset($_POST['password'])) {
+            $email = DB::sanitizeString($_POST['email']);
+            $password = DB::sanitizeString($_POST['password']);
+
+            $user = UserManager::getUserByMail($email);
+            if(!$user->getId()) {
+                DB::setMessage("Nous n'avons aucun utilisateur avec cet email", 'error');
+            }
+            else {
+                if(password_verify($password, $user->getPassword())) {
+                    // Do something with logged in user.
+                    $_SESSION['current_user'] = serialize($user);
+                    if(RoleManager::isPowerUser($user)) {
+                        echo "Redirect to admin area";
+                        header('Location: index.php?page=admin');
+                    }
+                }
+                else {
+                    DB::setMessage("Le mot de passe entré n'est pas correct", 'error');
+                }
+            }
+
+            require 'view/front/index.php';
+        }
+    }
+    // Disconnect process.
+    elseif($_GET['page'] === 'logout') {
+        $currentUser = null;
+        $_SESSION = [];
+        session_destroy();
+        header('Location: index.php');
+    }
 }
-
-if(isset($_GET['success']) && intval($_GET['success']) === -1) { ?>
-    <div class="error">Le mot de passe doit contenir au moins une lettre en majuscule,un chiffre et un caractère spéciale ! </div> <?php
+// Else, then display client area.
+else {
+    require 'view/front/index.php';
 }
-?>
-
-<!--le formulaire-->
-<div id="modal-2" class="modal">
-
-    <div id="container-form">
-        <img src="./asset/img/logo.jpg" alt="logo_site" id="logo">
-
-        <form method="post" action="Utilisateur/register.php">
-            <div>
-                <label for="username">
-                    <input type="text" name="username"  id="username" required placeholder="Nom">
-                </label>
-            </div>
-            <div>
-                <label for="firstName">
-                    <input type="text" name="firstName" id="firstName" required placeholder="Prénom">
-                </label>
-            </div>
-            <div>
-                <label for="password">
-                    <input type="text" name="password" id="password" required placeholder="Mot de passe">
-                </label>
-            </div>
-            <div>
-                <label for="passwordConfirm">
-                    <input type="text" name="passwordConfirm" id="passwordConfirm" required placeholder="Vérification du mot de passe">
-                </label>
-            </div>
-
-            <div>
-                <label for="phone">
-                    <input type="text" name="phone" id="phone" required placeholder="Numéro de téléphone">
-                </label>
-            </div>
-            <div>
-                <label for="e-mail">
-                    <input type="email" name="email" id="e-mail" pattern="^[A-Za-z]+@{1} [A-Za-z] +\.{1} [A-Za-z] {2,}$" required placeholder="Mail">
-                </label>
-            </div>
-            <div> Raisons :
-                <label for="other">
-                    <select name="other" id="other-choice">
-                        <option value="1"> dépannage pc</option>
-                        <option value="2"> dépannage tablette</option>
-                        <option value="3"> devis de site internet</option>
-                        <option value="4"> e-commerce</option>
-                        <option value="5"> maintenance de site internet</option>
-                        <option value="5"> autre...</option>
-                    </select>
-                </label>
-            </div>
-            <div>
-                <button type="submit" value="envoyer">Confirmer mon rendez-vous</button>
-            </div>
-        </form>
-
-    </div>
-</div>
-

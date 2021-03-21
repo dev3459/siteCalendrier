@@ -8,7 +8,7 @@ class UserManager {
      * Return a list of available users as User array.
      * @return array
      */
-    public function getUsers(): array {
+    public static function getUsers(): array {
         $users = [];
         $stmt = DB::getInstance()->prepare("SELECT * FROM user");
 
@@ -18,7 +18,7 @@ class UserManager {
                 $role = $roleManager->getRole($user_data['role_fk']);
                 // If id is a number and nut null, then create user object.
                 if($role->getId()) {
-                    $user[] = new User(
+                    $users[] = new User(
                         $user_data['id'],
                         $user_data['mail'],
                         $user_data['password'],
@@ -34,11 +34,31 @@ class UserManager {
     }
 
     /**
+     * Return a list of users based on roles.
+     * @return array
+     */
+    public static function getUsersByRole(): array {
+        $users = self::getUsers();
+        $roles = (new RoleManager())->getRoles();
+
+        $byRole = [];
+        foreach($roles as $role) {
+            $byRole[$role->getName()] = [];
+        }
+
+        // Filtering users by roles.
+        foreach($users as $user) {
+            $byRole[$user->getRole()->getName()][] = $user;
+        }
+        return $byRole;
+    }
+
+    /**
      * Return a User object based on a given user id.
      * @param int $userId
      * @return User
      */
-    public function getUser(int $userId): User {
+    public static function getUser(int $userId): User {
         $user = new User();
         $stmt = DB::getInstance()->prepare("SELECT * FROM user WHERE id=:i");
         $stmt->bindValue(':i', $userId);
@@ -46,14 +66,19 @@ class UserManager {
         if($stmt->execute()) {
             $roleManager = new RoleManager();
             $data = $stmt->fetch();
-
-            $user->setId($data['id']);
-            $user->setMail($data['mail']);
-            $user->setPassword($data['password']);
-            $user->setPhone($data['phone']);
-            $user->setFirstName($data['firstName']);
-            $user->setLastName($data['lastName']);
-            $user->setRole($roleManager->getRole($data['id']));
+            if($data !== false) {
+                $user->setId($data['id']);
+                $user->setMail($data['mail']);
+                $user->setPassword($data['password']);
+                $user->setPhone($data['phone']);
+                $user->setFirstName($data['firstName']);
+                $user->setLastName($data['lastName']);
+                $role = $roleManager->getRole($data['role_fk']);
+                // Adding rôle only if it exists ( role id is null if nothing matches in database )
+                if($role->getId()) {
+                    $user->setRole($role);
+                }
+            }
         }
         return $user;
     }
@@ -63,7 +88,7 @@ class UserManager {
      * @param User $user
      * @return bool
      */
-    public function save(User &$user): bool {
+    public static function save(User &$user): bool {
         // If id is null, then it does not exits into the database.
         if(is_null($user->getId())) {
             if(!DB::isNull($user->getMail(), $user->getPassword(), $user->getPhone(), $user->getFirstName(), $user->getLastName(), $user->getRole()->getId())) {
@@ -122,7 +147,7 @@ class UserManager {
      * @param String $clearPassord
      * @param User $user
      */
-    public function updatePassword(String $clearPassord, User $user): bool {
+    public static function updatePassword(String $clearPassord, User $user): bool {
         if(!DB::isNull($user->getId(), $clearPassord)) {
             // Setting up prepared statement.
             $stmt = DB::getInstance()->prepare("UPDATE user SET password=:p WHERE id=:i");
@@ -135,5 +160,61 @@ class UserManager {
             }
         }
         return false;
+    }
+
+
+    /**
+     * Delete a user from database.
+     * @param User $user
+     * @return bool
+     */
+    public static function delete(User $user): bool {
+        if(!DB::isNull($user->getId())) {
+            $stmt = DB::getInstance()->prepare("DELETE FROM user WHERE id=:id");
+            $stmt->bindValue(':id', $user->getId());
+            return $stmt->execute();
+        }
+        return false;
+    }
+
+    /**
+     * Return an array containing user meetings.
+     * @param User $user
+     * @return array
+     */
+    public static function getMeetings(User $user): array {
+        if(!DB::isNull($user->getId())) {
+            return (new MeetingManager())->getMeetings($user);
+        }
+        return [];
+    }
+
+    /**
+     * Get a user from iuts email.
+     * @param string $mail
+     * @return User
+     */
+    public static function getUserByMail(string $mail): User {
+        $user = new User();
+        $stmt = DB::getInstance()->prepare("SELECT * FROM user WHERE mail=:mail");
+        $stmt->bindValue(':mail', $mail);
+
+        if($stmt->execute()) {
+            $roleManager = new RoleManager();
+            $data = $stmt->fetch();
+            if($data !== false) {
+                $user->setId($data['id']);
+                $user->setMail($data['mail']);
+                $user->setPassword($data['password']);
+                $user->setPhone($data['phone']);
+                $user->setFirstName($data['firstName']);
+                $user->setLastName($data['lastName']);
+                $role = $roleManager->getRole($data['role_fk']);
+                if($role->getId()) {
+                    $user->setRole($role);
+                }
+            }
+        }
+        return $user;
     }
 }

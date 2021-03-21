@@ -7,6 +7,8 @@ class DB {
     private string $passwd = '';
 
     private static ?PDO $dbInstance = null;
+    private static array $message = [];
+    private static bool $hasError = false;
 
     /*
      * Static construct
@@ -80,6 +82,53 @@ class DB {
         return password_hash($password, PASSWORD_BCRYPT);
     }
 
+
+    /**
+     * Encode an error message.
+     * @param string $message
+     * @param string $type
+     */
+    public static function setMessage(string $message, string $type) {
+        $msg = [
+            'message' => $message,
+            'type' => $type,
+        ];
+
+        if($type === 'error') {
+            $msg['error'] = true;
+        }
+
+        self::$message = $msg;
+    }
+
+
+    /**
+     * Return if any message was recorded.
+     * @return bool
+     */
+    public static function hasMessage(): bool {
+        return count(self::$message) > 0;
+    }
+
+
+    /**
+     * Return the stored message and empty var message.
+     * @return array
+     */
+    public static function getMessage(): array {
+        $message = self::$message;
+        self::$message = [];
+        return $message;
+    }
+
+
+    /**
+     * Return true if an error was stored.
+     * @return bool
+     */
+    public static function hasError(): bool {
+        return array_key_exists('error', self::$message);
+    }
 
     /**
      * we prevent letting other developers clone the object
